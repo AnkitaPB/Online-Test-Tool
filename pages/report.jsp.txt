@@ -1,0 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@page import="bean.StudentBean"%>
+<%@page import="dao.StudentDAO"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="dao.StudentDAO"%>
+<%@page import="bean.Attempt"%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Test Review</title>
+<link rel="stylesheet" href="godavari.css" type="text/css" media="screen">
+<link rel="stylesheet" type="text/css" href="styles.css" />
+<link rel="stylesheet" href="main.css" type="text/css" media="screen">
+</head>
+<body>
+<div id=topborder></div>
+<h1>Test Report</h1>
+<font color="white" size="6px">Attempted Question:<br>
+<%
+    	
+try{
+//	StudentBean studentBean=new StudentBean();
+
+// studentBean=(StudentBean)session.getAttribute("StudentBean");
+	StudentDAO delegate=new StudentDAO();
+	
+	ResultSet rs=delegate.getReport();
+        while(rs.next())
+           out.println(rs.getInt("roll_no"));
+           out.println(rs.getString("student_name"));
+           out.println(rs.getString("subject"));
+           out.println(rs.getString("result"));
+          
+
+	
+}
+catch (Exception e){
+	System.out.println("Exception Occured in review.jsp: "+e);
+	
+}%>
+</font>
+</body>
+</html>

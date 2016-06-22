@@ -1,0 +1,94 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+
+import bean.UserBean;
+
+
+public class UserDAO extends CommonDAO{
+	
+	protected static final String GET_USER_BY_USERNAME_QUERY =  "select * from user where (user_name = ?)";
+	protected static final String GET_USER_BY_UESRNAME_PASSWORD_QUERY =  "select * from user where (user_name = ? and password=?)";
+	protected static final String GET_Test_KEY_BY_SUBJECT =  "select test_key from subject where subject_name = ? ";
+	int test_key;
+	
+	
+
+	UserBean userBean=null;
+	public UserDAO() {
+	super();
+	super.initConnection();
+		
+	}
+public UserBean  getUserByUserNamePassword(String userName,String passWord) throws Exception 	{
+	   
+		userBean=new UserBean();
+		
+		PreparedStatement ps = con.prepareStatement(GET_USER_BY_UESRNAME_PASSWORD_QUERY);
+		ps.setString(1,userName);
+		ps.setString(2,passWord);
+		ResultSet rs = ps.executeQuery();
+		System.out.println("***In user DAO:   klkkk");
+        while(rs.next())
+		{
+			userBean.setUserKey(rs.getInt("user_key"));
+			userBean.setUserName(rs.getString("user_name"));
+			userBean.setPassword(rs.getString("password"));
+			userBean.setSubjectName(rs.getString("subject"));
+			
+			
+		}
+        //System.out.println("IN  DAO"+ userBean.getUserName());	
+		
+    	return userBean;			
+        
+	}
+    public int getTestKeyBySubject(String subject_name)throws Exception{
+    	     	 PreparedStatement ps = con.prepareStatement(GET_Test_KEY_BY_SUBJECT);
+ 		ps.setString(1,subject_name);
+ 		ResultSet rs = ps.executeQuery();
+ 		if(rs.next()){
+ 			test_key=rs.getInt("test_key");
+ 		}
+ 		 
+ 		 System.out.println("**** :"+test_key);
+    	 return test_key;
+    	
+    }
+	public UserBean getUserByUserName(String userName)throws Exception
+	{
+			PreparedStatement ps = con.prepareStatement(GET_USER_BY_USERNAME_QUERY);
+			ps.setString(1,userName);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()==true)
+			{
+				UserBean userBean=new UserBean();
+				userBean.setUserKey(rs.getInt("user_Key"));
+				userBean.setUserName(rs.getString("user_name"));
+				userBean.setPassword(rs.getString("password"));
+						return userBean;
+			}
+			return null;	
+	}
+	
+	/*public void registerUser(UserBean userBean)throws Exception
+	{
+			PreparedStatement ps1 = con.prepareStatement(INSERT_USER_QUERY);
+    	 	ps1.setString(1,userBean.getUserName()); 
+	    	ps1.setString(2,userBean.getPassword());
+	    	ps1.setString(3,userBean.getEmailAdderss());
+	    	ps1.setString(4,userBean.getQuestion());
+	    	ps1.setString(5,userBean.getAnswer());
+	       	ps1.executeUpdate();
+	}*/
+	
+	
+	
+	public void forgottenPassword(UserBean userBean)
+	{
+		
+	}
+}
